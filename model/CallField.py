@@ -1,3 +1,6 @@
+from functools import total_ordering
+
+@total_ordering
 class CallField(object):
     """Association of a class call with one of its input/output"""
     def __init__(self, call, field):
@@ -9,8 +12,14 @@ class CallField(object):
         return '%s.%s' % (self.call, self.field)
     def __hash__(self):
         return hash((self.call, self.field))
-    def __cmp__(self, other):
-        return cmp(type(self), type(other)) or cmp((self.call, self.field), (other.call, other.field))
+    def __lt__(self, other):
+        if type(self) < type(other):
+            return True
+        if type(self) > type(other):
+            return False
+        return (self.call, self.field) < (other.call, other.field)
+    def __eq__(self, other):
+        return type(self) == type(other) and (self.call, self.field) == (other.call, other.field)
     def is_input(self, cls):
         return self.can_be_dst()
     def is_output(self, cls):

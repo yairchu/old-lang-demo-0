@@ -24,5 +24,5 @@ class CrossDict(object):
         if val not in self.cross:
             return set()
         return self.cross[val]
-    def iteritems(self):
+    def items(self):
         return self.dict.items()
