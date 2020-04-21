@@ -2,8 +2,8 @@
 # - make method to know which inputs are bound to a value from parent
 # - consider splitting the ultra-generic Field into InputField and OutputField (and perhaps Proxy as well)
 
-from CallField import CallField
-from clsnodes import Constant, Field, ClassCall
+from .CallField import CallField
+from .clsnodes import Constant, Field, ClassCall
 
 class BaseClass(object):
     def __init__(self, label, nodes):
@@ -16,7 +16,7 @@ class BaseClass(object):
     def add_instance(self, obj):
         self._instances[id(obj)] = obj
     def instances(self):
-        return self._instances.values()
+        return list(self._instances.values())
     def inputs(self):
         for node in self.nodes:
             if node.is_input(self):

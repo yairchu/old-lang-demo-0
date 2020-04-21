@@ -10,6 +10,6 @@ class Event(object):
             try:
                 callback()
             except:
-                print "Unhandled exception in event handler:", self, callback
+                print("Unhandled exception in event handler:", self, callback)
                 import traceback
                 traceback.print_exc()

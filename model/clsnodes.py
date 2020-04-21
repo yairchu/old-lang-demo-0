@@ -1,4 +1,4 @@
-from CallField import CallField
+from .CallField import CallField
 
 class ClassNode(object):
     """Any of the potential value-holders in a class"""

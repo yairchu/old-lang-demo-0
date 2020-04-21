@@ -3,7 +3,7 @@ import pygame
 pygame.font.init()
 fonts = list(
     pygame.font.SysFont(pygame.font.get_default_font(), int(i**1.1))
-    for i in xrange(10, 100)
+    for i in range(10, 100)
 )
 
 def approximate_binary_search(items, cmp):
@@ -21,7 +21,8 @@ def approximate_binary_search(items, cmp):
     else:
         return item
 
-def find_font(lines, (max_width, max_height)):
+def find_font(lines, xxx_todo_changeme):
+    (max_width, max_height) = xxx_todo_changeme
     def does_fit(font):
         if font.get_height() * len(lines) > max_height:
             return 1

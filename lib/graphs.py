@@ -13,7 +13,7 @@ def topological_sort(graph):
                 scan(link)
             result.append(node)
         cur.remove(node)
-    for node in graph.iterkeys():
+    for node in graph.keys():
         cur = set()
         scan(node)
     return result

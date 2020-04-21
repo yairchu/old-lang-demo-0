@@ -40,11 +40,14 @@ def graph_positions(surface, graph):
             cur_x += dist_in_row
         cur_y += row_size
 
-def distance_2d((ax, ay), (bx, by)):
+def distance_2d(xxx_todo_changeme1, xxx_todo_changeme2):
+    (ax, ay) = xxx_todo_changeme1
+    (bx, by) = xxx_todo_changeme2
     return ((ax-bx)**2+(ay-by)**2)**.5
 
-def draw_centered_text(surface, (x, y), text, color, max_size):
-    lines = [line.strip() for line in filter(None, text.splitlines())]
+def draw_centered_text(surface, xxx_todo_changeme3, text, color, max_size):
+    (x, y) = xxx_todo_changeme3
+    lines = [line.strip() for line in [_f for _f in text.splitlines() if _f]]
     from lib.font import find_font
     font = find_font(lines, max_size)
     pixels = [font.render(line, True, color) for line in lines]
@@ -61,7 +64,7 @@ def cls_to_graph(cls):
         res[node] = set()
     if not isinstance(cls, model.cls.Class):
         return res
-    for src, dst in cls.links.iteritems():
+    for src, dst in cls.links.items():
         if isinstance(src, CallField):
             src = src.call
         if isinstance(dst, CallField):
@@ -69,7 +72,8 @@ def cls_to_graph(cls):
         res[src].add(dst)
     return res
 
-def call_positions(node, ((x, y), radius)):
+def call_positions(node, xxx_todo_changeme4):
+    ((x, y), radius) = xxx_todo_changeme4
     inputs = list(node.cls.inputs())
     outputs = list(node.cls.outputs())
     for negate, items in [(-1, inputs), (1, outputs)]:
@@ -140,7 +144,7 @@ class ObjEdit(object):
         self.animation_index = 0
         # Put default items in self.positions so we can iterate it and
         # see "all" changes (both additions and deletions.)
-        for key, (pos, radius) in self.new_positions.iteritems():
+        for key, (pos, radius) in self.new_positions.items():
             self.positions.setdefault(key, (pos, 0))
 
     def update_positions(self):
@@ -154,7 +158,7 @@ class ObjEdit(object):
             min_distance = min(self.surface.get_size())
         node_radius = min_distance/3
 
-        self.new_positions = dict((k, (pos, node_radius)) for k, pos in positions.iteritems())
+        self.new_positions = dict((k, (pos, node_radius)) for k, pos in positions.items())
 
     def animation_progress(self):
         if self.animation_index is None:
@@ -179,12 +183,12 @@ class ObjEdit(object):
             return min(pos + max(3, int((new_pos-pos) / slowness)), new_pos)
         else:
             return max(pos + min(-3, int((new_pos-pos) / slowness)), new_pos)
-        
+
     def draw(self):
         self.animation_progress()
         self.surface.fill(self.bg_color)
-        nodes_order = self.positions.keys()
-        for node in self.positions.keys():
+        nodes_order = list(self.positions.keys())
+        for node in list(self.positions.keys()):
             if isinstance(node, model.clsnodes.ClassCall):
                 new_positions = dict(call_positions(node, self.positions[node]))
                 nodes_order.extend(new_positions.keys())
@@ -201,11 +205,11 @@ class ObjEdit(object):
                 color = self.field_color
             pygame.draw.circle(self.surface, color, (int(x), int(y)), int(radius))
         if isinstance(self.obj.cls, model.cls.Class):
-            for dst, src in self.obj.cls.links.iteritems():
+            for dst, src in self.obj.cls.links.items():
                 pygame.draw.line(self.surface, self.arrow_color, self.positions[src][0], self.positions[dst][0], 2)
         if self.is_dragging and self.drag_dst is not None:
                   pygame.draw.line(self.surface, self.drag_arrow_color, self.positions[self.drag_src][0], self.positions[self.drag_dst][0], 2)
-        for node, ((x, y), radius) in self.positions.iteritems():
+        for node, ((x, y), radius) in self.positions.items():
             if node in self.obj:
                 text = str(self.obj[node])
             else:
@@ -223,7 +227,7 @@ class ObjEdit(object):
         if order is None:
             return False
         src, dst = order
-        
+
         # check that it doesn't make cycles in graph
         graph = cls_to_graph(self.obj.cls)
 
@@ -231,16 +235,17 @@ class ObjEdit(object):
             if isinstance(field, CallField):
                 return field.call
             return field
-        src, dst = map(field_node, (src, dst))
+        src, dst = list(map(field_node, (src, dst)))
 
         # See if adding this to the graph creates cycles
         graph[dst].add(src)
         if graphs.has_cycles(graph):
             return False
-        
+
         return True
-    def obj_at_pos(self, (x, y), filter):
-        for obj, ((ox, oy), radius) in self.positions.iteritems():
+    def obj_at_pos(self, xxx_todo_changeme, filter):
+        (x, y) = xxx_todo_changeme
+        for obj, ((ox, oy), radius) in self.positions.items():
             if abs(x-ox) > radius or abs(y-oy) > radius:
                 continue
             if (x-ox)**2+(y-oy)**2 <= radius**2 and filter(obj):

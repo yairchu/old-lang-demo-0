@@ -25,4 +25,4 @@ class CrossDict(object):
             return set()
         return self.cross[val]
     def iteritems(self):
-        return self.dict.iteritems()
+        return self.dict.items()
